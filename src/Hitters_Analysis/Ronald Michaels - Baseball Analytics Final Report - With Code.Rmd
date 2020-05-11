@@ -1,0 +1,800 @@
+---
+title: "Baseball Analytics Final Report"
+author: "Ronald Michaels"
+date: "Spring 2020 Semester"
+output: pdf_document
+header-includes: \usepackage{color}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+```
+
+This paper will describe my pesonal project for the independent study of Baseball Analytics at the University of Rochester. 
+The team of students consisted of Maya Haigis, Luke Gerstner, John Polimeni, and myself. The academic advisors watching over 
+our work were Professor Anand, Professor Mort, and Head Baseball Coach Joe Reina. 
+
+My personal project for this final report is based on comparing the predictions Coach Reina had for our offensive player's 
+versus what the computer model predicts. In terms of desired statistics, Coach Reina and I decided that the four main 
+statistics we wanted to highlight were: Batting Average (AVG), On Base Percentage (OBP), Slugging Percentage (SLG), and On 
+Base Plus Slugging (OPS). **First-year player's and sophomores who were red-shirted their first-year will not be included in 
+this report due to their limited exposure to college baseball at this time.**
+
+*****
+The following table displays the predictions Coach Reina had for our elligible offensive player's
+```{r, echo = TRUE} 
+# read in csv file containing predicted statistics
+Reina_Predictions = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/Spring 2020 Baseball Analytics 
+Intuition_Prediction Sheet - Sheet2.csv")
+as.data.frame(Reina_Predictions)
+Data_Table = as.data.table(Reina_Predictions)
+```
+*****
+The next step in this process is to input average offensive statistics from not just our home conference of the Liberty 
+League, but of all division three baseball teams on the NCAA website. Due to the untimely cancellation of our baseball season 
+as a result of COVID-19, the statistics will be weighted based on the player's statistics over time. For example, current 
+seniors will be predicted based on statistics from the years 2017-2020, juniors from the years 2018-2020, and sophomores from 
+the years 2019-2020. 
+
+Comparison Statistics from 2017-2020:
+
+2017 Liberty League Baseball Average Statisitcs
+```{r, echo= TRUE}
+LL_2017 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2017 Liberty Stats - Sheet1.csv")
+df.2017.LL = as.data.frame(LL_2017)
+average_table_LL_2017 = data.table(t(x = c(mean(df.2017.LL$AVG), mean(df.2017.LL$OBP), mean(df.2017.LL$SLG), 
+mean(df.2017.LL$OPS))))
+colnames(average_table_LL_2017) = c("AVG", "OBP", "SLG", "OPS")
+average_table_LL_2017
+```
+
+2018 Liberty League Baseball Average Statisitcs
+```{r, echo = TRUE}
+# 2018 LL
+LL_2018 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2018 LL Stats  - Sheet1.csv")
+df.2018.LL =  as.data.frame(LL_2018)
+average_table_LL_2018 = data.table(t(x = c(mean(df.2018.LL$AVG), mean(df.2018.LL$OBP), mean(df.2018.LL$SLG), 
+mean(df.2018.LL$OPS))))
+colnames(average_table_LL_2018) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_LL_2018
+```
+
+2019 Liberty League Baseball Average Statisitcs
+```{r, echo = TRUE}
+# 2019 LL
+LL_2019 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2019 LL Stats - Sheet1.csv")
+df.2019.LL =  as.data.frame(LL_2019)
+average_table_LL_2019 = data.table(t(x = c(mean(df.2019.LL$AVG), mean(df.2019.LL$OB), mean(df.2019.LL$SLG), 
+mean(df.2019.LL$OPS))))
+colnames(average_table_LL_2019) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_LL_2019
+```
+
+2020 Liberty League Baseball Average Statisitcs
+```{r, echo = TRUE}
+# 2020 LL
+LL_2020 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2020 LL Stats - Sheet1.csv")
+df.2020.LL =  as.data.frame(LL_2020)
+average_table_LL_2020 = data.table(t(x = c(mean(df.2020.LL$AVG), mean(df.2020.LL$OBP), mean(df.2020.LL$SLG), 
+mean(df.2020.LL$OPS))))
+colnames(average_table_LL_2020) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_LL_2020
+```
+
+2017 NCAA Average Statistics 
+```{r, echo = TRUE}
+# 2017 NCAA
+NCAA_2017 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2017 NCAA Stats - Sheet1.csv")
+df.2017.NCAA =  as.data.frame(NCAA_2017)
+df.2017.NCAA = df.2017.NCAA[, -c(3:7)] 
+average_table_NCAA_2017 = data.table(t(x = c(mean(df.2017.NCAA$BA), mean(df.2017.NCAA$OBPct), mean(df.2017.NCAA$SLG), 
+mean(df.2017.NCAA$OPS))))
+colnames(average_table_NCAA_2017) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_NCAA_2017
+```
+
+2018 NCAA Average Statistics
+```{r, echo = TRUE}
+# 2018 NCAA
+NCAA_2018 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2018 NCAA Stats - Sheet1.csv")
+df.2018.NCAA =  as.data.frame(NCAA_2018)
+df.2018.NCAA = df.2018.NCAA[, -c(3:7)] 
+average_table_NCAA_2018 = data.table(t(x = c(mean(df.2018.NCAA$BA), mean(df.2018.NCAA$OBPct), mean(df.2018.NCAA$SLG), 
+mean(df.2018.NCAA$OPS))))
+colnames(average_table_NCAA_2018) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_NCAA_2018
+```
+
+2019 NCAA Average Statistics
+```{r, echo = TRUE}
+# 2019 NCAA
+NCAA_2019 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2019 NCAA Stats  - Sheet1.csv")
+df.2019.NCAA =  as.data.frame(NCAA_2019)
+df.2019.NCAA = df.2019.NCAA[, -c(3:7)] 
+average_table_NCAA_2019 = data.table(t(x = c(mean(df.2019.NCAA$BA), mean(df.2019.NCAA$OBPct), mean(df.2019.NCAA$SLG), 
+mean(df.2019.NCAA$OPS))))
+colnames(average_table_NCAA_2019) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_NCAA_2019
+```
+
+2020 NCAA Average Statistics
+```{r, echo = TRUE}
+# 2020 NCAA
+NCAA_2020 = read.csv("/Users/ronaldmichaels/Downloads/Junior Year/Baseball Project/2020 NCAA Stats - Sheet1.csv")
+df.2020.NCAA =  as.data.frame(NCAA_2020)
+df.2020.NCAA = df.2020.NCAA[, -c(3:7)] 
+average_table_NCAA_2020 = data.table(t(x = c(mean(df.2020.NCAA$BA), mean(df.2020.NCAA$OBPct), mean(df.2020.NCAA$SLG), 
+mean(df.2020.NCAA$OPS))))
+colnames(average_table_NCAA_2020) = c("AVG", "OBP", "SLG", "OPS") 
+average_table_NCAA_2020
+```
+
+Each data frame will be weighted based on the player's year in school. In my estimate, it is important to value the player's 
+earlier statistics versus their later statistics due to their perceived growth over time. For example, if a player were to 
+have a batting average of 0.300 their first year versus a batting average of 0.300 their senior year, I am choosing to weight 
+their first year statistics more than their senior year statistics. The weight for each class year will follow this scale:
+
+For Current Seniors:        
+First Year Statistics: .40 = 40%    
+Sophomore Year Statistics: .30 = 30%    
+Junior Year Statistics: .20 = 20%    
+Senior Year Statistics: .10 = 10% 
+
+For Current Juniors:    
+First Year Statistics: .50 = 50%    
+Sophomore Year Statistics: .35 = 35%    
+Junior Year Statistics: .15 = 15%
+
+For Current Sophomores:    
+First Year Statistics: .85 = 85%    
+Sophomore Year Statistcs: .15 = 15% 
+
+*****
+The next step in the prediction process is to see how these player's compared to their peers (Liberty League + Overall NCAA). 
+In addition, their percent difference from these peers will be calculated as well. 
+```{r, echo = TRUE}
+# AVG
+Senior.Mean.BA = (.40*((mean(((df.2017.LL$AVG)+mean(df.2017.NCAA$BA))/2)))) + (.30*
+((mean(((df.2018.LL$AVG)+mean(df.2018.NCAA$BA))/2)))) + (.20*((mean(((df.2019.LL$AVG)+mean(df.2019.NCAA$BA))/2)))) + (.10*
+((mean(((df.2020.LL$AVG)+mean(df.2020.NCAA$BA))/2))))
+
+Junior.Mean.BA =  (.50*((mean(((df.2018.LL$AVG)+mean(df.2018.NCAA$BA))/2)))) + (.35*
+((mean(((df.2019.LL$AVG)+mean(df.2019.NCAA$BA))/2)))) + (.15*((mean(((df.2020.LL$AVG)+mean(df.2020.NCAA$BA))/2))))
+
+Sophomore.Mean.BA =   (.85*((mean(((df.2019.LL$AVG)+mean(df.2019.NCAA$BA))/2)))) + (.15*
+((mean(((df.2020.LL$AVG)+mean(df.2020.NCAA$BA))/2))))
+
+#OBP
+Senior.Mean.OBP = (.40*((mean(((average_table_LL_2017$OBP)+mean(average_table_NCAA_2017$OBP))/2)))) + (.30*
+((mean(((average_table_LL_2018$OBP)+mean(average_table_NCAA_2018$OBP))/2)))) + (.20*
+((mean((((average_table_LL_2019$OBP)+mean(average_table_NCAA_2019$OBP))/2))))) + (.10*
+((mean((((average_table_LL_2020$OBP)+mean(average_table_NCAA_2020$OBP))/2)))))
+
+Junior.Mean.OBP = (.50*((mean(((average_table_LL_2018$OBP)+mean(average_table_NCAA_2018$OBP))/2)))) + (.35*
+((mean((((average_table_LL_2019$OBP)+mean(average_table_NCAA_2019$OBP))/2))))) + (.15*
+((mean((((average_table_LL_2020$OBP)+mean(average_table_NCAA_2020$OBP))/2)))))
+
+Sophomore.Mean.OBP = (.85*(((mean((((average_table_LL_2019$OBP)+mean(average_table_NCAA_2019$OBP))/2)))))) + (.15*
+((mean((((average_table_LL_2020$OBP)+mean(average_table_NCAA_2020$OBP))/2)))))
+
+#SLG
+Senior.Mean.SLG = (.40*((mean(((average_table_LL_2017$SLG)+mean(average_table_NCAA_2017$SLG))/2)))) + (.30*
+((mean(((average_table_LL_2018$SLG)+mean(average_table_NCAA_2018$SLG))/2)))) + (.20*
+((mean((((average_table_LL_2019$SLG)+mean(average_table_NCAA_2019$SLG))/2))))) + (.10*
+((mean((((average_table_LL_2020$SLG)+mean(average_table_NCAA_2020$SLG))/2)))))
+
+Junior.Mean.SLG = (.50*((mean(((average_table_LL_2018$SLG)+mean(average_table_NCAA_2018$SLG))/2)))) + (.35*
+((mean((((average_table_LL_2019$SLG)+mean(average_table_NCAA_2019$SLG))/2))))) + (.15*
+((mean((((average_table_LL_2020$SLG)+mean(average_table_NCAA_2020$SLG))/2)))))
+
+Sophomore.Mean.SLG = (.85*(((mean((((average_table_LL_2019$SLG)+mean(average_table_NCAA_2019$SLG))/2)))))) + (.15*
+((mean((((average_table_LL_2020$SLG)+mean(average_table_NCAA_2020$SLG))/2)))))
+
+#OPS
+Senior.Mean.OPS = (.40*((mean(((average_table_LL_2017$OPS)+mean(average_table_NCAA_2017$OPS))/2)))) + (.30*
+((mean(((average_table_LL_2018$OPS)+mean(average_table_NCAA_2018$OPS))/2)))) + (.20*
+((mean((((average_table_LL_2019$OPS)+mean(average_table_NCAA_2019$OPS))/2))))) + (.10*
+((mean((((average_table_LL_2020$OPS)+mean(average_table_NCAA_2020$OPS))/2)))))
+
+Junior.Mean.OPS = (.50*((mean(((average_table_LL_2018$OPS)+mean(average_table_NCAA_2018$OPS))/2)))) + (.35*
+((mean((((average_table_LL_2019$OPS)+mean(average_table_NCAA_2019$OPS))/2))))) + (.15*
+((mean((((average_table_LL_2020$OPS)+mean(average_table_NCAA_2020$OPS))/2)))))
+
+Sophomore.Mean.OPS = (.85*(((mean((((average_table_LL_2019$OPS)+mean(average_table_NCAA_2019$OPS))/2)))))) + (.15*
+((mean((((average_table_LL_2020$OPS)+mean(average_table_NCAA_2020$OPS))/2)))))
+```
+
+Senior Mean Batting Average (AVG) - Weighted = 0.2850806    
+Junior Mean Batting Average (AVG) - Weighted = 0.2857346    
+Sophomore Mean Batting Average (AVG) - Weighted = 0.285565    
+
+Senior Mean On Base Percentage (OBP) - Weighted = 0.372966    
+Junior Mean On Base Percentage (OBP) - Weighted = 0.3755705    
+Sophomore Mean On Base Percentage (OBP) - Weighted = 0.3761781    
+
+Senior Mean Slugging Percentage (SLG) - Weighted = 0.4270123    
+Junior Mean Slugging Percentage (SLG) - Weighted = 0.4304819    
+Sophomore Mean Slugging Percentage (SLG) - Weighted = 0.4299721    
+
+Senior Mean On Base Plus Slugging Percentage (OPS) - Weighted = 0.7999783    
+Junior Mean On Base Plus Slugging Percentage (OPS) - Weighted = 0.8060524    
+Sophomore Mean On Base Plus Slugging Percentage (OPS) - Weighted = 0.8061501    
+
+```{r, echo=TRUE}
+# percent difference calculations from player's actual statistics compared to above averages
+
+#Parent Function For Senior player's 
+i = 0
+Actual.Senior.Weighted = function(a,b,c,d){
+  for(i in 0:4){
+    if (i == 0) {
+      a = a*.40
+    }
+    else if (i ==1) {
+      b = b*.30
+    }
+    else if (i == 2) {
+      c = c*.20
+    }
+    else if (i == 3) {
+      d = d*.10
+    }
+    else if (i == 4) {
+      return (a + b + c + d)
+      break
+    }
+    i = i + 1
+  }
+}
+# Parent Function For Junior player's
+Actual.Junior.Weighted = function(a,b,c){
+  for(i in 0:3){
+    if (i == 0) {
+      a = a*.50
+    }
+    else if (i ==1) {
+      b = b*.35
+    }
+    else if (i == 2) {
+      c = c*.15
+    }
+    else if (i == 3) {
+      return (a + b + c)
+      break
+    }
+    i = i + 1
+  }
+}
+# Parent Function For Sophomore player's
+Actual.Sophomore.Weighted = function(a,b){
+  for(i in 0:2){
+    if (i == 0) {
+      a = a*.85
+    }
+    else if (i ==1) {
+      b = b*.15
+    }
+    else if (i == 2) {
+      return (a + b)
+      break
+    }
+    i = i + 1
+  }
+}
+```
+
+```{r, echo = TRUE}
+# Calculate Batting Averages Using The Above Function
+
+# Calculate Senior Batting Averages Using The Above Function
+Aaron.Craig.AVG = Actual.Senior.Weighted(.143,.325,.150,.364)
+David.Rieth.AVG = Actual.Senior.Weighted(.299,.313,.344,.556)
+Jake.Hertz.AVG = Actual.Senior.Weighted(.286,.400,.331,.412)
+Kyle.Trombley.AVG = Actual.Senior.Weighted(.222,.275,.214,.083)
+Ryland.McNabb.AVG = Actual.Senior.Weighted(.143,.227,.190,1.000)
+Zach.Miraz.AVG = Actual.Senior.Weighted(.250,.167,.275,.143)
+
+# Calculate Junior Batting Averages Using The Above Function
+Andrew.Bankovich.AVG = Actual.Junior.Weighted(.290,.217,.250)
+Steve.Pickering.AVG = Actual.Junior.Weighted(.389,.322,.125)
+
+# Calculate Sophomore Batting Averages Using The Above Function
+Brian.McKinsey.AVG = Actual.Sophomore.Weighted(.163,.313)
+Harper.Sy.AVG = Actual.Sophomore.Weighted(.321,.182)
+Jacob.Matzat.AVG = Actual.Sophomore.Weighted(.351,0.000)
+Joseph.Rende.AVG = Actual.Sophomore.Weighted(.247,.471)
+Luke.Piontek.AVG = Actual.Sophomore.Weighted(.111,0.000)
+```
+
+```{r, echo = TRUE}
+# Calculate On Base Percentage Using The Above Function
+
+# Calculate Senior On Base Percentage Using The Above Function
+Aaron.Craig.OBP = Actual.Senior.Weighted(.250,.380,.209,.500)
+David.Rieth.OBP = Actual.Senior.Weighted(.415,.411,.411,.571)
+Jake.Hertz.OBP = Actual.Senior.Weighted(.328,.435,.397,.474)
+Kyle.Trombley.OBP = Actual.Senior.Weighted(.254,.389,.282,.214)
+Ryland.McNabb.OBP = Actual.Senior.Weighted(.300,.469,.308,1.000)
+Zach.Miraz.OBP = Actual.Senior.Weighted(.400,.286,.370,.143)
+
+# Calculate Junior On Base Percentage Using The Above Function
+Andrew.Bankovich.OBP = Actual.Junior.Weighted(.379,.275,.250)
+Steve.Pickering.OBP = Actual.Junior.Weighted(.443,.322,.125)
+
+# Calculate Sophomore On Base Percentage Using The Above Function
+Brian.McKinsey.OBP = Actual.Sophomore.Weighted(.321,.353)
+Harper.Sy.OBP = Actual.Sophomore.Weighted(.350,.250)
+Jacob.Matzat.OBP = Actual.Sophomore.Weighted(.447,0.000)
+Joseph.Rende.OBP = Actual.Sophomore.Weighted(.314,.571)
+Luke.Piontek.OBP = Actual.Sophomore.Weighted(.308,.200)
+```
+
+```{r, echo = TRUE}
+# Calculate Slugging Percentage Using The Above Function
+
+# Calculate Senior Slugging Percentage Using The Above Function
+Aaron.Craig.SLG = Actual.Senior.Weighted(.143,.376,.175,.364)
+David.Rieth.SLG = Actual.Senior.Weighted(.425,.366,.513,.778)
+Jake.Hertz.SLG = Actual.Senior.Weighted(.357,.500,.401,.412)
+Kyle.Trombley.SLG = Actual.Senior.Weighted(.254,.373,.310,.083)
+Ryland.McNabb.SLG = Actual.Senior.Weighted(.125,.273,.286,1.000)
+Zach.Miraz.SLG = Actual.Senior.Weighted(.250,.167,.420,.143)
+
+# Calculate Junior Slugging Percentage Using The Above Function
+Andrew.Bankovich.SLG = Actual.Junior.Weighted(.420,.283,.500)
+Steve.Pickering.SLG = Actual.Junior.Weighted(.479,.326,.250)
+
+# Calculate Sophomore Slugging Percentage Using The Above Function
+Brian.McKinsey.SLG = Actual.Sophomore.Weighted(.209,.438)
+Harper.Sy.SLG = Actual.Sophomore.Weighted(.402,.273)
+Jacob.Matzat.SLG = Actual.Sophomore.Weighted(.414,0.000)
+Joseph.Rende.SLG = Actual.Sophomore.Weighted(.280,.706)
+Luke.Piontek.SLG = Actual.Sophomore.Weighted(.111,.200)
+```
+
+```{r, echo = TRUE}
+# Calculate On Base Plus Slugging Percentage Using The Above Function
+
+# Calculate Senior On Base Plus Slugging Percentage Using The Above Function
+Aaron.Craig.OPS = Actual.Senior.Weighted(.393,.756,.384,.864)
+David.Rieth.OPS = Actual.Senior.Weighted(.840,.777,.924,1.349)
+Jake.Hertz.OPS = Actual.Senior.Weighted(.685,.935,.798,.886)
+Kyle.Trombley.OPS = Actual.Senior.Weighted(.508,.762,.592,.297)
+Ryland.McNabb.OPS = Actual.Senior.Weighted(.425,.742,.594,2.000)
+Zach.Miraz.OPS = Actual.Senior.Weighted(.650,.453,.790,.286)
+
+# Calculate Junior On Base Plus Slugging Percentage Using The Above Function
+Andrew.Bankovich.OPS = Actual.Junior.Weighted(.799,.558,.750)
+Steve.Pickering.OPS = Actual.Junior.Weighted(.922,.648,.375)
+
+# Calculate Sophomore On Base Plus Slugging Percentage Using The Above Function
+Brian.McKinsey.OPS = Actual.Sophomore.Weighted(.530,.791)
+Harper.Sy.OPS = Actual.Sophomore.Weighted(.752,.523)
+Jacob.Matzat.OPS = Actual.Sophomore.Weighted(.861,0.000)
+Joseph.Rende.OPS = Actual.Sophomore.Weighted(.594,1.277)
+Luke.Piontek.OPS = Actual.Sophomore.Weighted(.419,0.000)
+```
+
+Average Calculation with Weighted Statistics per Player
+```{r, echo = TRUE}
+Weighted.Data.Table = data.table(
+  Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+  Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+  AVG = round(c(Aaron.Craig.AVG, David.Rieth.AVG, Jake.Hertz.AVG, Kyle.Trombley.AVG, Ryland.McNabb.AVG, Zach.Miraz.AVG, 
+  Andrew.Bankovich.AVG, Steve.Pickering.AVG, Brian.McKinsey.AVG, Harper.Sy.AVG, Jacob.Matzat.AVG, Joseph.Rende.AVG, 
+  Luke.Piontek.AVG),digits = 3),
+  OBP = round(c(Aaron.Craig.OBP, David.Rieth.OBP, Jake.Hertz.OBP, Kyle.Trombley.OBP, Ryland.McNabb.OBP, Zach.Miraz.OBP, 
+  Andrew.Bankovich.OBP, Steve.Pickering.OBP, Brian.McKinsey.OBP, Harper.Sy.OBP, Jacob.Matzat.OBP, Joseph.Rende.OBP, 
+  Luke.Piontek.OBP),digits = 3),
+  SLG = round(c(Aaron.Craig.SLG, David.Rieth.SLG, Jake.Hertz.SLG, Kyle.Trombley.SLG, Ryland.McNabb.SLG, Zach.Miraz.SLG, 
+  Andrew.Bankovich.SLG, Steve.Pickering.SLG, Brian.McKinsey.SLG, Harper.Sy.SLG, Jacob.Matzat.SLG, Joseph.Rende.SLG, 
+  Luke.Piontek.SLG),digits = 3),
+  OPS = round(c(Aaron.Craig.OPS, David.Rieth.OPS, Jake.Hertz.OPS, Kyle.Trombley.OPS, Ryland.McNabb.OPS, Zach.Miraz.OPS, 
+  Andrew.Bankovich.OPS, Steve.Pickering.OPS, Brian.McKinsey.OPS, Harper.Sy.OPS, Jacob.Matzat.OPS, Joseph.Rende.OPS, 
+  Luke.Piontek.OPS),digits = 3),
+  Class.Year = c("Senior", "Senior", "Senior","Senior", "Senior", 
+  "Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+Weighted.Data.Table
+```
+
+Percent Difference With Weighted Averages versus National Averages
+```{r, echo = TRUE}
+# AVG Function
+i = 1
+list.avg = list()
+Percent.Diff.Average = function(df){
+  for(i in 1:13){
+    if (df[i,6] == "Senior"){
+      Percent.Diff.BA = ((df[i,2]/0.2850806)-1)
+      list.avg = c(list.avg,Percent.Diff.BA)
+    }
+    else if (df[i,6] == "Junior"){
+      Percent.Diff.BA = ((df[i,2]/0.2857346)-1)
+      list.avg = c(list.avg,Percent.Diff.BA)
+    }
+    else if (df[i,6] == "Sophomore"){
+      Percent.Diff.BA = ((df[i,2]/0.285565)-1)
+      list.avg = c(list.avg,Percent.Diff.BA)
+    }
+    i = i + 1
+  }
+  return(list.avg)
+}
+
+# OBP Function
+j = 1
+list.obp = list()
+Percent.Diff.OBPer = function(df){
+  for(j in 1:13){
+    if (df[j,6] == "Senior"){
+      Percent.Diff.OBP = ((df[j,3]/0.372966)-1)
+      list.obp = c(list.obp,Percent.Diff.OBP)
+    }
+    else if (df[j,6] == "Junior"){
+      Percent.Diff.OBP = ((df[j,3]/0.3755705)-1)
+      list.obp = c(list.obp,Percent.Diff.OBP)
+    }
+    else if (df[j,6] == "Sophomore"){
+      Percent.Diff.OBP = ((df[j,3]/0.3761781)-1)
+      list.obp = c(list.obp,Percent.Diff.OBP)
+    }
+    j = j + 1
+  }
+  return(list.obp)
+}
+
+# SLG Function
+k = 1
+list.slg = list()
+Percent.Diff.SLG.Per = function(df){
+  for(k in 1:13){
+    if (df[k,6] == "Senior"){
+      Percent.Diff.SLG = ((df[k,4]/0.4270123)-1)
+      list.slg = c(list.slg,Percent.Diff.SLG)
+    }
+    else if (df[k,6] == "Junior"){
+      Percent.Diff.SLG = ((df[k,4]/0.4304819)-1)
+      list.slg = c(list.slg,Percent.Diff.SLG)
+    }
+    else if (df[k,6] == "Sophomore"){
+      Percent.Diff.SLG = ((df[k,4]/0.4299721)-1)
+      list.slg = c(list.slg,Percent.Diff.SLG)
+    }
+    k = k + 1
+  }
+  return(list.slg)
+}
+
+# OPS Function
+m = 1
+list.ops = list()
+Percent.Diff.OPS.Perc = function(df){
+  for(m in 1:13){
+    if (df[m,6] == "Senior"){
+      Percent.Diff.OPS = ((df[m,5]/0.7999783)-1)
+      list.ops = c(list.ops,Percent.Diff.OPS)
+    }
+    else if (df[m,6] == "Junior"){
+      Percent.Diff.OPS = ((df[m,5]/0.8060524)-1)
+      list.ops = c(list.ops,Percent.Diff.OPS)
+    }
+    else if (df[m,6] == "Sophomore"){
+      Percent.Diff.OPS = ((df[m,5]/0.8061501)-1)
+      list.ops = c(list.ops,Percent.Diff.OPS)
+    }
+    m = m + 1
+  }
+  return(list.ops)
+}
+
+AVG.Percent.Diff = data.table(
+   Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+   Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+   AVG = round(as.numeric(Percent.Diff.Average(Weighted.Data.Table)), digits = 3),
+   OBP = round(as.numeric(Percent.Diff.OBPer(Weighted.Data.Table)), digits = 3),
+   SLG = round(as.numeric(Percent.Diff.SLG.Per(Weighted.Data.Table)), digits = 3),
+   OPS = round(as.numeric(Percent.Diff.OPS.Perc(Weighted.Data.Table)), digits = 3),
+   Class.Year = c("Senior","Senior","Senior","Senior","Senior","Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+AVG.Percent.Diff
+```
+*****
+Now that the weighted averages are calculated, the multiple linear regression that will be performed will be for the four main statistics (AVG,OBP,SLG,OPS) based on class year and average at bats per game.
+
+Number Of At Bats Per Game Over Career
+```{r, echo = TRUE}
+# Calculate Average Number Of At Bats Per Game
+Senior.Num.Games = 30 + 36 + 46 + 5
+Junior.Num.Games = 36 + 46 + 5
+Sophomore.Num.Games = 46 + 5
+Num.At.Bats.P.Game = data.table(
+   Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+   Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+   Avg.AB.Game = c((176/Senior.Num.Games),(399/Senior.Num.Games),(306/Senior.Num.Games),(305/Senior.Num.Games),
+   (52/Senior.Num.Games),(86/Senior.Num.Games),(150/Junior.Num.Games),(290/Junior.Num.Games),(59/Sophomore.Num.Games),
+   (123/Sophomore.Num.Games),(114/Sophomore.Num.Games),(110/Sophomore.Num.Games),(13/Sophomore.Num.Games)),
+   Class.Year = c("Senior","Senior","Senior","Senior","Senior","Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+colnames(Num.At.Bats.P.Game) = c("Player.Name","Average.AB.Per.Game","Class.Year")
+Num.At.Bats.P.Game
+```
+
+Regression Analysis
+```{r, echo = TRUE}
+# Multiple Regression Analysis
+
+# AVG
+avg.regression <- lm(Weighted.Data.Table$AVG ~ Weighted.Data.Table$Class.Year + Num.At.Bats.P.Game$Average.AB.Per.Game) 
+pred.avg = predict(avg.regression,list(Weighted.Data.Table$Class.Year,Num.At.Bats.P.Game$Average.AB.Per.Game))
+predict.table.avg = data.table(pred.avg)
+
+# OBP
+obp.regression <- lm(Weighted.Data.Table$OBP ~ Weighted.Data.Table$Class.Year + Num.At.Bats.P.Game$Average.AB.Per.Game) 
+pred.obp = predict(obp.regression,list(Weighted.Data.Table$Class.Year,Num.At.Bats.P.Game$Average.AB.Per.Game))
+predict.table.obp = data.table(pred.obp)
+
+# SLG
+slg.regression <- lm(Weighted.Data.Table$SLG ~ Weighted.Data.Table$Class.Year + Num.At.Bats.P.Game$Average.AB.Per.Game) 
+pred.slg = predict(slg.regression,list(Weighted.Data.Table$Class.Year,Num.At.Bats.P.Game$Average.AB.Per.Game))
+predict.table.slg = data.table(pred.slg)
+
+# OPS
+ops.regression <- lm(Weighted.Data.Table$OPS ~ Weighted.Data.Table$Class.Year + Num.At.Bats.P.Game$Average.AB.Per.Game) 
+pred.ops = predict(ops.regression,list(Weighted.Data.Table$Class.Year,Num.At.Bats.P.Game$Average.AB.Per.Game))
+predict.table.ops = data.table(pred.ops)
+
+# Data Table
+Multiple.Linear.Regression.Values = data.table(
+   Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+   Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+   AVG = round((predict.table.avg), digits = 3),
+   OBP = round((predict.table.obp), digits = 3),
+   SLG = round((predict.table.slg), digits = 3),
+   OPS = round((predict.table.ops), digits = 3),
+   Class.Year = c("Senior","Senior","Senior","Senior","Senior","Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+colnames(Multiple.Linear.Regression.Values) = c("Player.Name","LR.AVG","LR.OBP","LR.SLG","LR.OPS","Class.Year")
+Multiple.Linear.Regression.Values
+```
+
+*****
+Multiply the predicted values from the above regression table by their specific percent differences to obtain the final 
+computer model outputs.    
+Of Note: OPS does not precisely equal OBP + SLG due to rounding errors as a result of each statistic being held to three 
+decimal places.
+```{r, echo = TRUE}
+#AVG
+i = 1
+list.mult.avg = list()
+Final.Adjusted.Output.AVG = function(df1,df2){
+  for(i in 1:13){
+    if (df1[i,6] == "Senior"){
+      Percent.Adjusted.BA = (((df1[i,2])*(1+(df2[i,2]))))
+      list.mult.avg = c(list.mult.avg,Percent.Adjusted.BA)
+    }
+    else if (df1[i,6] == "Junior"){
+      Percent.Adjusted.BA = (((df1[i,2])*(1+(df2[i,2]))))
+      list.mult.avg = c(list.mult.avg,Percent.Adjusted.BA)
+    }
+    else if (df1[i,6] == "Sophomore"){
+      Percent.Adjusted.BA = (((df1[i,2])*(1+(df2[i,2]))))
+      list.mult.avg = c(list.mult.avg,Percent.Adjusted.BA)
+    }
+    i = i + 1
+  }
+  return(list.mult.avg)
+}
+
+# OBP
+j = 1
+list.mult.obp = list()
+Final.Adjusted.Output.OBP = function(df1,df2){
+  for(j in 1:13){
+    if (df1[j,6] == "Senior"){
+      Percent.Adjusted.OBP = (((df1[j,3])*(1+(df2[j,3]))))
+      list.mult.obp = c(list.mult.obp,Percent.Adjusted.OBP)
+    }
+    else if (df1[j,6] == "Junior"){
+      Percent.Adjusted.OBP = (((df1[j,3])*(1+(df2[j,3]))))
+      list.mult.obp = c(list.mult.obp,Percent.Adjusted.OBP)
+    }
+    else if (df1[j,6] == "Sophomore"){
+      Percent.Adjusted.OBP = (((df1[j,3])*(1+(df2[j,3]))))
+      list.mult.obp = c(list.mult.obp,Percent.Adjusted.OBP)
+    }
+    j = j + 1
+  }
+  return(list.mult.obp)
+}
+
+# SLG
+k = 1
+list.mult.slg = list()
+Final.Adjusted.Output.SLG = function(df1,df2){
+  for(k in 1:13){
+    if (df1[k,6] == "Senior"){
+      Percent.Adjusted.SLG = (((df1[k,4])*(1+(df2[k,4]))))
+      list.mult.slg = c(list.mult.slg,Percent.Adjusted.SLG)
+    }
+    else if (df1[k,6] == "Junior"){
+      Percent.Adjusted.SLG = (((df1[k,4])*(1+(df2[k,4]))))
+      list.mult.slg = c(list.mult.slg,Percent.Adjusted.SLG)
+    }
+    else if (df1[k,6] == "Sophomore"){
+      Percent.Adjusted.SLG = (((df1[k,4])*(1+(df2[k,4]))))
+      list.mult.slg = c(list.mult.slg,Percent.Adjusted.SLG)
+    }
+    k = k + 1
+  }
+  return(list.mult.slg)
+}
+
+# OPS
+r = 1
+list.mult.ops = list()
+Final.Adjusted.Output.OPS = function(df1,df2){
+  for(r in 1:13){
+    if (df1[r,6] == "Senior"){
+      Percent.Adjusted.OPS = (((df1[r,5])*(1+(df2[r,5]))))
+      list.mult.ops = c(list.mult.ops,Percent.Adjusted.OPS)
+    }
+    else if (df1[r,6] == "Junior"){
+      Percent.Adjusted.OPS = (((df1[r,5])*(1+(df2[r,5]))))
+      list.mult.ops = c(list.mult.ops,Percent.Adjusted.OPS)
+    }
+    else if (df1[r,6] == "Sophomore"){
+      Percent.Adjusted.OPS = (((df1[r,5])*(1+(df2[r,5]))))
+      list.mult.ops = c(list.mult.ops,Percent.Adjusted.OPS)
+    }
+    r = r + 1
+  }
+  return(list.mult.ops)
+}
+
+# Data Table
+Percent.Adjusted.Vales = data.table(
+   Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+   Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+   AVG = round((as.numeric((Final.Adjusted.Output.AVG(Multiple.Linear.Regression.Values,AVG.Percent.Diff)))), digits = 3),
+   OBP = round((as.numeric((Final.Adjusted.Output.OBP(Multiple.Linear.Regression.Values,AVG.Percent.Diff)))), digits = 3),
+   SLG = round((as.numeric((Final.Adjusted.Output.SLG(Multiple.Linear.Regression.Values,AVG.Percent.Diff)))), digits = 3),
+   OPS = round((as.numeric((Final.Adjusted.Output.OPS(Multiple.Linear.Regression.Values,AVG.Percent.Diff)))), digits = 3),
+   Class.Year = c("Senior","Senior","Senior","Senior","Senior","Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+Percent.Adjusted.Vales
+```
+
+*****
+The final portion of this report is comparing these computer results to Coach Reina's predictions.    
+Percent Difference versus Coach Reina          
+Positive percentages mean Coach Reina's predictions are above the computer generated outcomes by the given percentage.    
+Negative percentages mean Coach Reina's predictions are below the computer generated outcomes by the given percentage.    
+```{r, echo = TRUE}
+#AVG
+i = 1
+list.compare.avg = list()
+Compare.AVG = function(df1,df2){
+  for(i in 1:13){
+    if (df1[i,6] == "Senior"){
+      Compare.AVG.Reina = ((df1[i,2]/df2[i,2])-1)
+      list.compare.avg = c(list.compare.avg,Compare.AVG.Reina)
+    }
+    else if (df1[i,6] == "Junior"){
+      Compare.AVG.Reina = ((df1[i,2]/df2[i,2])-1)
+      list.compare.avg = c(list.compare.avg,Compare.AVG.Reina)
+    }
+    else if (df1[i,6] == "Sophomore"){
+      Compare.AVG.Reina = ((df1[i,2]/df2[i,2])-1)
+      list.compare.avg = c(list.compare.avg,Compare.AVG.Reina)
+    }
+    i = i + 1
+  }
+  return(list.compare.avg)
+}
+
+# OBP
+j = 1
+list.compare.obp = list()
+Compare.OBP = function(df1,df2){
+  for(j in 1:13){
+    if (df1[j,6] == "Senior"){
+      Compare.OBP.Reina = ((df1[j,3]/df2[j,3])-1)
+      list.compare.obp = c(list.compare.obp,Compare.OBP.Reina)
+    }
+    else if (df1[j,6] == "Junior"){
+      Compare.OBP.Reina = ((df1[j,3]/df2[j,3])-1)
+      list.compare.obp = c(list.compare.obp,Compare.OBP.Reina)
+    }
+    else if (df1[j,6] == "Sophomore"){
+      Compare.OBP.Reina = ((df1[j,3]/df2[j,3])-1)
+      list.compare.obp = c(list.compare.obp,Compare.OBP.Reina)
+    }
+    j = j + 1
+  }
+  return(list.compare.obp)
+}
+
+# SLG
+k = 1
+list.compare.slg = list()
+Compare.SLG = function(df1,df2){
+  for(k in 1:13){
+    if (df1[k,6] == "Senior"){
+      Compare.SLG.Reina = ((df1[k,4]/df2[k,4])-1)
+      list.compare.slg = c(list.compare.slg,Compare.SLG.Reina)
+    }
+    else if (df1[k,6] == "Junior"){
+      Compare.SLG.Reina = ((df1[k,4]/df2[k,4])-1)
+      list.compare.slg = c(list.compare.slg,Compare.SLG.Reina)
+    }
+    else if (df1[k,6] == "Sophomore"){
+      Compare.SLG.Reina = ((df1[k,4]/df2[k,4])-1)
+      list.compare.slg = c(list.compare.slg,Compare.SLG.Reina)
+    }
+    k = k + 1
+  }
+  return(list.compare.slg)
+}
+
+# OPS
+r = 1
+list.compare.ops = list()
+Compare.OPS = function(df1,df2){
+  for(r in 1:13){
+    if (df1[r,6] == "Senior"){
+      Compare.OPS.Reina = ((df1[r,5]/df2[r,5])-1)
+      list.compare.ops = c(list.compare.ops,Compare.OPS.Reina)
+    }
+    else if (df1[r,6] == "Junior"){
+      Compare.OPS.Reina = ((df1[r,5]/df2[r,5])-1)
+      list.compare.ops = c(list.compare.ops,Compare.OPS.Reina)
+    }
+    else if (df1[r,6] == "Sophomore"){
+      Compare.OPS.Reina = ((df1[r,5]/df2[r,5])-1)
+      list.compare.ops = c(list.compare.ops,Compare.OPS.Reina)
+    }
+    r = r + 1
+  }
+  return(list.compare.ops)
+}
+
+# Data Table
+Final.Comparisons = data.table(
+   Player.Name = c("Aaron Craig", "David Rieth", "Jake Hertz", "Kyle Trombley", "Ryland Mcnabb", "Zach Miraz", "Andrew 
+   Bankovich", "Steve Pickering", "Brian McKinsey", "Harper Sy", "Jacob Matzat", "Joseph Rende", "Luke Piontek"),
+   AVG = paste0(round((as.numeric((Compare.AVG(Data_Table,Percent.Adjusted.Vales)))), digits = 3)*100,"%"),
+   OBP = paste0(round((as.numeric((Compare.OBP(Data_Table,Percent.Adjusted.Vales)))), digits = 3)*100,"%"),
+   SLG = paste0(round((as.numeric((Compare.SLG(Data_Table,Percent.Adjusted.Vales)))), digits = 3)*100,"%"),
+   OPS = paste0(round((as.numeric((Compare.SLG(Data_Table,Percent.Adjusted.Vales)))), digits = 3)*100,"%"),
+   Class.Year = c("Senior","Senior","Senior","Senior","Senior","Senior","Junior","Junior","Sophomore","Sophomore","Sophomore","Sophomore","Sophomore")
+)
+Final.Comparisons
+```
+
+After speaking to Coach Reina about the results, I have a newfound appreciation for what a coach takes into consideration 
+versus what a computer takes in. For example, a coach takes into account the mental perception of pre-season performance, 
+growth in the weight room, and intellectual maturity. The computer, on the other hand, only takes in the desired concrete 
+information. Therefore, my conclusion for this specific project is that the optimal solution for perfecting predictions is to 
+not only analyze a player's raw statistics, but to also look at intangible traits that are blind to machines. It is the 
+combination of what coaches describe as “the eye test” and what analysts call “raw data” to create peak analysis.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

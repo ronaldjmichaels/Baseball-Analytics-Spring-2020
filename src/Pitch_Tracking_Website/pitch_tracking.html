@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src ="jquery_pitch_tracking.js"></script>
+
+</head>
+
+<style>
+.column-left{ float: left; width: 30.0%; }
+.column-right{ float: right; width: 36.333%; }
+.column-center{ display: inline-block; width: 33.333%; }
+</style>
+
+<body style="background-color:LightSteelBlue;">
+<div class="header" align="center" style="border-color: white, border-style: solid;;">
+	<font size ="6" id="round_label">University of Rochester Baseball Pitch Tracking</font>
+
+</div>
+
+<br> <br>
+<div id ="home_page">
+	<button onclick="showNormal()" type="button" style="border-radius: 15px;">Start Bullpen</button>
+	<!-- <button onclick="showLive()" type="button" style="border-radius: 15px;">Live Bullpen</button> -->
+</div>
+
+<!-- Normal Bullpen Div -->
+<div id = "Normal_Bullpen" style="display: none"> 
+<div class = "column-left" align="left">
+		
+	Pitcher's Name:	
+	<select id="name">
+	  <option value=""></option>
+	  <option value="Jon Turk">Jon Turk</option>
+	  <option value="Nick Clift">Nick Clift</option>
+	  <option value="Nathan Slenska">Nathan Slenska</option>
+	  <option value="Jason Cobert">Jason Cobert</option>
+	  <option value="Alex Muchnick">Alex Muchnick</option>
+	  <option value="Brendan Shamieh">Brendan Shamieh</option>
+	  <option value="Hank Powers">Hank Powers</option>
+	  <option value="Dan Agate">Dan Agate</option>
+	  <option value="Luke Boylan">Luke Boylan</option>
+	  <option value="Spencer Rojahn">Spencer Rojahn</option>
+	  <option value="Trevor Van Allen">Trevor Van Allen</option>
+	  <option value="Garrett Renslow">Garrett Renslow</option>
+	  <option value="Connor Ojerholm">Connor Ojerholm</option>
+	  <option value="Thomas Karpishin">Thomas Karpishin</option>
+  	  <option value="John Moses">John Moses</option>
+	</select> 
+
+	Date: <input type="Date" name="Date" id="date"> <br>
+	Live: <input type="Number" name="Inning" id="live">
+	Inning: <input type="Number" name="Inning" id="inning"> <br>
+
+	<p id="pitch_number">Pitch Number: 1</p>
+
+		<p id="pitch_type">Pitch Type: <br>
+		<input type="radio" name="Pitch Type" checked id="fastball">Fastball<br>
+		<input type="radio" name="Pitch Type" id="breaking_ball">Breaking Ball<br>
+		<input type="radio" name="Pitch Type" id="changeup">Changeup<br>
+		<input type="radio" name="Pitch Type" id="other_type">Other<br>
+	</p>
+	
+
+	Pitch Location: <input type="Number" name="Pitch Location" id="pitch_location"> <br> <br>
+		
+	Batter Number: <input type="Number" name="Batter Number" id="batter_number"> <br> <br>
+
+	Count:
+		<select id="count">
+		  <option value=""></option>
+		  <option value="0b-0s">0 - 0</option>
+		  <option value="1b-0s">1 - 0</option>
+		  <option value="2b-0s">2 - 0</option>
+		  <option value="3b-0s">3 - 0</option>
+		  <option value="0b-1s">0 - 1</option>
+		  <option value="1b-1s">1 - 1</option>
+		  <option value="2b-1s">2 - 1</option>
+		  <option value="3b-1s">3 - 1</option>
+		  <option value="0b-2s">0 - 2</option>
+		  <option value="1b-2s">1 - 2</option>
+		  <option value="2b-2s">2 - 2</option>
+		  <option value="3b-2s">3 - 2</option>
+		  </select> <br> <br>
+
+		Executed:
+		<select id="executed">
+		<option value=""></option>
+		<option value="False">False</option>
+		<option value="True">True</option>
+		</select> <br> <br>
+
+		Hit/Miss:
+		<select id="hit_miss">
+		<option value=""></option>
+		<option value="Hit">Hit</option>
+		<option value="Miss">Miss</option>
+		</select> <br> <br>
+		<button onclick="Tracking()" type="button" style="border-radius: 15px;">NEXT PITCH</button>
+
+<br>
+</div>
+
+<div class="column-center" align="center" >
+	<img src="strike_zone2.png" alt="Strike Zone" >
+
+</div>
+
+<div class="column-right" align="center">
+	Notes:<br>
+	<textarea id="note_area" rows="10" cols="50" ></textarea>
+	<br>
+	<button onclick="submit()" type="button" style="border-radius: 15px;">SUBMIT</button>
+</div>
+</div>
+<!-- End of Normal Bullpen Div -->
+
+
+</body>
+</html>

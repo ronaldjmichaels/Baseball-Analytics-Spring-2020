@@ -1,0 +1,201 @@
+---
+title: "Hitting Report"
+author: "Zach Miraz"
+date: "2/17/2020-2/23/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = F}
+#read data into csv file
+path = "C:/Users/Maya/Documents/Baseball/Miraz5.csv"
+df= read.csv(path)
+```
+
+
+```{r, echo = FALSE}
+#clean data
+column_names = as.character(unlist(df[7,]))
+colnames(df) = column_names
+df = df[-c(1,2,3,4,5,6,7),]
+
+to_numeric = column_names[5:17]
+df[to_numeric] <- sapply(df[to_numeric],as.character)
+df[to_numeric] <- sapply(df[to_numeric],as.numeric)
+
+total_swings= dim(df)[1]
+```
+\begin{center}
+\includegraphics{C:/Users/Maya/Documents/Baseball/baseball_logo.png}  
+
+\end{center}
+
+
+The four metrics this report will focus on are _Bat Speed (mph), Attack Angle (deg), Power (kW), and Vertical Bat Angle (deg)_  
+
+
+## Bat Speed (mph):  
+
+Bat Speed is the observed speed of the sweet spot of the bat at impact. The sweet spot of the bat is measured six inches from the tip of the bat.
+
+Professional MLB: 66 – 78 mph  
+Minor League MiLB: 63 – 75 mph  
+__College: 61 – 73 mph__  
+High School Varsity: 57 – 71 mph  
+High School Junior Varsity: 53 – 67 mph  
+Middle School: 46 – 62 mph  
+Youth: 40 – 56 mph  
+
+[Link to video on bat speed](https://rochester-baseball.blastconnect.com/training-center/v3/baseball/metrics/impact-metrics/bat-speed)
+
+## Attack Angle:
+
+Attack angle is the angle of the bat’s path (side view), at impact, relative to horizontal. A positive value indicates swinging up, and a negative value indicates swinging down, where zero is perfectly level.
+
+What should Attack Angle be? The average fastball crosses the plate at a 6-degree downward angle, while a breaking ball crosses the plate at a minimum 10-degree downward angle. Other factors could include bat speed and style, pitch velocity and location, and game situation. According to Blast, MLB hitting coaches often teach that in order to hit a line drive, the hitter needs an Attack Angle between 6 – 14 degrees.  Our own internal research confirms a similar range.
+
+Analysis from Blast database provides typical Attack Angle ranges for the following age groups and skill levels for baseball:
+
+Professional: 2 to 16 deg  
+Minor League MiLB: 1 to 15 deg  
+__College: 0 to 14 deg __  
+High School Varsity: 0 to 14 deg  
+High School Junior Varsity: 0 to 14 deg  
+Middle School: 0 to 14 deg  
+Youth: 0 to 14 deg  
+
+[Link to video on attack angle](https://rochester-baseball.blastconnect.com/training-center/v3/baseball/metrics/impact-metrics/attack-angle)
+
+## Power (kW):
+
+The average Power generated during the swing is found from the effective mass of the bat, the Bat Speed at impact, and the average acceleration during the downswing. Power is measured in kilowatts (kW). Higher Power is achieved when a hitter can swing a heavier bat and accelerate it to higher speeds.
+
+Professional MLB: 3.8 – 5.7 kW  
+Minor League MiLB: 3.8 – 5.2 kW  
+__College: 3.8 – 5.1 kW  __  
+High School Varsity: 2.8 – 4.1 kW  
+High School Junior Varsity: 1.8 – 3.8 kW  
+Middle School: 1.4 – 3.2 kW  
+Youth: 0.9 – 2.5 kW  
+
+[Link to video on power](https://rochester-baseball.blastconnect.com/training-center/v3/baseball/metrics/impact-metrics/power)
+
+## Vertical Bat Angle (deg):
+
+Vertical Bat Angle is the angle of the bat (front view) with respect to horizontal at the moment of impact. Vertical Bat Angle is measured in degrees and provides the location of the barrel of the bat relative to the knob of the bat at impact. Vertical Bat Angle will be zero when the barrel of the bat and the knob are parallel to the ground. It will be negative when the barrel of the bat is below the knob of the bat at impact.
+
+Analysis from Blast database provides typical Vertical Bat Angle ranges for the following age groups and skill levels for baseball:
+
+Professional: -25 to -35 deg  
+Minor League MiLB: -24 to -34 deg  
+__College: -23 to -33 deg  __    
+High School Varsity: -21 to -31 deg  
+High School Junior Varsity: -20 to -30 deg  
+Middle School: -17 to -27 deg  
+Youth: -15 to -25 deg  
+
+ 
+[Link to video on vertical bat angle](https://rochester-baseball.blastconnect.com/training-center/v3/baseball/metrics/impact-metrics/vertical-bat-angle)
+
+\newpage
+
+# Metric Analysis: Bat Speed (mph)
+```{r, echo=FALSE}
+# summary statistics for time period
+summary(df$`Bat Speed (mph)`)
+
+below = round(length(df$`Bat Speed (mph)`[df$`Bat Speed (mph)`<61])/total_swings*100, 2)
+within = round(length(df$`Bat Speed (mph)`[df$`Bat Speed (mph)`<=73& df$`Bat Speed (mph)`>=61])/total_swings*100,2)
+above = round(length(df$`Bat Speed (mph)`[df$`Bat Speed (mph)`>73])/total_swings*100,2)
+# line plot
+y = df$`Bat Speed (mph)`
+x = (1:length(df$`Bat Speed (mph)`))
+plot(x,y, type = "l", xlab = "Swing Count Over Time Period", ylab = "Bat Speed (mph)", 
+     main = "Swing Count Over Time Period vs Bat Speed (mph)")
+lm1 = lm(y~x)
+# trendline
+abline(lm1, col = "red")
+#goal lines
+abline(h=61, col='green')
+abline(h=73, col='green')
+slope = lm1$coefficients[2]
+```
+__Conclusion:__ The optimal bat speed for a college player is between 61 and 73 mph. `r below` percent of your swings were below this range, __`r within` percent of your swings were within this range__, and `r above` percent of your swings were above this range. Throughout the week, the slope of your bat speed was `r slope`. Great work!
+
+\newpage
+# Metric Analysis: Attack Angle
+```{r, echo=FALSE}
+# summary statistics for time period
+summary(df$`Attack Angle (deg)`)
+
+below = round(length(df$`Attack Angle (deg)`[df$`Attack Angle (deg)`<6])/total_swings*100,2)
+within = round(length(df$`Attack Angle (deg)`[df$`Attack Angle (deg)`<=14& df$`Attack Angle (deg)`>=6])/total_swings*100,2)
+above = round(length(df$`Attack Angle (deg)`[df$`Attack Angle (deg)`>14])/total_swings*100,2)
+# line plot
+y = df$`Attack Angle (deg)`
+x = (1:length(y))
+plot(x,y, type = "l", xlab = "Swing Count Over Time Period", ylab = "Attack Angle (deg)", 
+     main = "Swing Count Over Time Period vs Attack Angle (deg)")
+lm1 = lm(y~x)
+# trendline and goal ranges
+abline(lm1, col = "red")
+abline(h=6, col='green')
+abline(h=14, col='green')
+lm1
+
+slope = lm1$coefficients[2]
+```
+__Conclusion:__ The optimal attack angle for a college player is between 6 and 10 degrees. `r below` percent of your swings were below this range, __`r within` percent of your swings were within this range__, and `r above` percent of your swings were above this range. Throughout the week, the slope of your attack angle was `r slope`. 
+
+\newpage
+# Metric Analysis: Power (kW):
+```{r, echo = FALSE}
+# summary statistics for time period
+summary(df$`Power (kW)`)
+
+below = round(length(df$`Power (kW)`[df$`Power (kW)`<3.8])/total_swings*100,2)
+within = round(length(df$`Power (kW)`[df$`Power (kW)`<=5.1& df$`Power (kW)`>=3.8])/total_swings*100,2)
+above = round(length(df$`Power (kW)`[df$`Power (kW)`>5.1])/total_swings*100,2)
+# line plot
+y = df$`Power (kW)`
+x = (1:length(y))
+plot(x,y, type = "l", xlab = "Swing Count Over Time Period", ylab = "Power (kW)", 
+     main = "Swing Count Over Time Period vs Power (kW)")
+lm1 = lm(y~x)
+# trendline
+abline(lm1, col = "red")
+abline(h=3.8, col='green')
+abline(h=5.1, col='green')
+lm1
+
+slope = lm1$coefficients[2]
+```
+__Conclusion:__ The optimal power for a college player is between 3.8 and 5.1 kW. `r below` percent of your swings were below this range, __`r within` percent of your swings were within this range__, and `r above` percent of your swings were above this range. Throughout the week, the slope of your power was `r slope`. Keep it up!
+
+\newpage
+# Metric Analysis: Vertical Bat Angle (deg)
+```{r, echo = FALSE}
+# summary statistics for time period
+summary(df$`Vertical Bat Angle (deg)`)
+below = round(length(df$`Vertical Bat Angle (deg)`[df$`Vertical Bat Angle (deg)`<(-33)])/total_swings*100,2)
+within = round(length(df$`Vertical Bat Angle (deg)`[df$`Vertical Bat Angle (deg)`<=(-23)& df$`Vertical Bat Angle (deg)`>=(-33)])/total_swings*100,2)
+above = round(length(df$`Vertical Bat Angle (deg)`[df$`Vertical Bat Angle (deg)`>(-23)])/total_swings*100,2)
+# line plot
+y = df$`Vertical Bat Angle (deg)`
+x = (1:length(y))
+plot(x,y, type = "l", xlab = "Swing Count Over Time Period", ylab = "Vertical Bat Angle (deg)", 
+     main = "Swing Count Over Time Period vs Vertical Bat Angle (deg)")
+lm1 = lm(y~x)
+# trendline
+abline(lm1, col = "red")
+abline(h=-23, col='green')
+abline(h=-33, col='green')
+lm1
+
+slope = lm1$coefficients[2]
+```
+__Conclusion:__ The optimal vertical bat angle for a college player is between -33 and -23 degrees. `r below` percent of your swings were below this range, __`r within` percent of your swings were within this range,__ and `r above` percent of your swings were above this range. Throughout the week, the slope of your vertical bat angle was `r slope`. 

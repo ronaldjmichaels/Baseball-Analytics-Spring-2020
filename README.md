@@ -1,7 +1,7 @@
 # University of Rochester Baseball
 
 
-This is a repository started by Luke Gerstner, John Polimeni, Maya Haigis, and RJ Michaels from our independent study under Professor Brendan Mort during the spring semester of 2020. This repository is to keep track of all the data and code used for working with U of R's baseball team.
+This is a repository started by R.J. Michaels, Luke Gerstner, John Polimeni, and Maya Haigis from our independent study under Professor Brendan Mort during the spring semester of 2020. This repository is to keep track of all the data and code used for working with the U of R's baseball team.
 
 ### Contents
 ***
